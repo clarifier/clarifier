@@ -36,6 +36,10 @@
 	];
 </script>
 
+<svelte:head>
+	<title>Dashboard - Clarifier</title>
+</svelte:head>
+
 <main>
 	<section class="flex w-full flex-col gap-6 rounded-md bg-secondary p-6">
 		<section class="flex flex-col">
