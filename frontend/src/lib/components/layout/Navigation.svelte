@@ -3,14 +3,23 @@
 	import logo from '$lib/assets/logo.png';
 	import { Activity, CheckCircle, Database, Eye, Loader } from 'lucide-svelte';
 	import { Button } from '../ui/button';
+	import { page } from '$app/stores';
+	import { cn } from '$lib/utils';
 
 	let pages = [
-		{ label: 'Dashboard', to: '/', icon: Activity },
-		{ label: 'Sources', to: '/', icon: Database },
-		{ label: 'Profiling', to: '/', icon: Eye },
-		{ label: 'Cleaning', to: '/', icon: Loader },
-		{ label: 'Deploy', to: '/', icon: CheckCircle }
+		{ label: 'Dashboard', to: '/', icon: Activity, strict: true },
+		{ label: 'Sources', to: '/source', icon: Database },
+		{ label: 'Profiling', to: '/profilei', icon: Eye, disabled: true },
+		{ label: 'Cleaning', to: '/clean', icon: Loader, disabled: true },
+		{ label: 'Deploy', to: '/deploy', icon: CheckCircle, disabled: true }
 	];
+
+	$: currentPage = (e: string, strict?: boolean) => {
+		if (strict) {
+			return $page.url.pathname == e;
+		}
+		return $page.url.pathname.startsWith(e);
+	};
 </script>
 
 <section class="flex flex-col gap-2">
@@ -26,8 +35,16 @@
 <WorkspaceSelector />
 
 <section class="flex flex-col gap-0">
-	{#each pages as { label, to, icon }}
-		<Button size="sm" href={to} variant="ghost" class="flex flex-row justify-start gap-3">
+	{#each pages as { label, to, icon, strict, disabled }}
+		<Button
+			size="sm"
+			href={to}
+			variant={currentPage(to, strict ?? false) ? 'secondary' : 'ghost'}
+			class={cn(
+				'flex flex-row justify-start gap-3',
+				disabled && 'pointer-events-none text-gray-500'
+			)}
+		>
 			<svelte:component this={icon} size="18" />
 			{label}
 		</Button>

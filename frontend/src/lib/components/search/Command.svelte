@@ -2,6 +2,7 @@
 	import * as Command from '$lib/components/ui/command';
 	import { searchOpen } from '$lib/stores/search';
 	import { onMount } from 'svelte';
+	import { Badge } from '../ui/badge';
 
 	onMount(() => {
 		function handleKeydown(e: KeyboardEvent) {
@@ -24,9 +25,15 @@
 	<Command.List>
 		<Command.Empty>No results found.</Command.Empty>
 		<Command.Group heading="Suggestions">
-			<Command.Item>Calendar</Command.Item>
-			<Command.Item>Search Emoji</Command.Item>
-			<Command.Item>Calculator</Command.Item>
+			<Command.Item>
+				Search for an OpenML dataset <Badge variant="outline" class="ml-auto">Sources</Badge>
+			</Command.Item>
+			<Command.Item>
+				Download CSV from URL <Badge variant="outline" class="ml-auto">Sources</Badge>
+			</Command.Item>
+			<Command.Item>
+				Open a quality dimension <Badge variant="outline" class="ml-auto">Profile</Badge>
+			</Command.Item>
 		</Command.Group>
 	</Command.List>
 </Command.Dialog>
