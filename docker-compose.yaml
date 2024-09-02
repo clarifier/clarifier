@@ -11,24 +11,28 @@ services:
     env_file: config/config.env
     volumes:
       - redis-data:/bitnami/redis/data
+  minio:
+    image: minio/minio
+    env_file: config/config.env
+    volumes:
+      - minio-data:/data
   frontend:
-    build:
-      context: frontend
-      dockerfile: Dockerfile.development
+    build: ./frontend
     env_file: config/config.env
     ports:
       - 5173:5173
     volumes:
       - ./frontend:/app:ro
   storage:
-    build:
-      context: storage
+    build: ./storage
     env_file: config/config.env
   engine:
-    build:
-      context: engine
+    build: ./engine
     env_file: config/config.env
   workflow:
-    build:
-      context: workflow
+    build: ./workflow
     env_file: config/config.env
+volumes:
+  redis-data:
+  pgsql-data:
+  minio-data:
