@@ -1,18 +1,8 @@
 <script lang="ts">
 	import BackButton from '$lib/components/BackButton.svelte';
 	import { Database } from 'lucide-svelte';
-	import * as Select from '$lib/components/ui/select';
-	import { sources } from '$lib/components/sources/search';
-
-	let source: {
-		value: keyof typeof sources;
-		label: string;
-		disabled: boolean;
-	} = {
-		value: 'upload',
-		label: sources['upload'].label,
-		disabled: false
-	};
+	import { sources } from './sources';
+	import * as Card from '$lib/components/ui/card';
 </script>
 
 <svelte:head>
@@ -28,25 +18,21 @@
 		</section>
 	</section>
 
-	<section class="flex flex-col gap-1.5">
-		<Select.Root portal={null} bind:selected={source}>
-			<Select.Trigger class="w-full">
-				<Select.Value placeholder="Select how you want to add a new source" />
-			</Select.Trigger>
-			<Select.Content>
-				<Select.Group>
-					{#each Object.entries(sources) as [value, { label }]}
-						<Select.Item {value} {label}>{label}</Select.Item>
-					{/each}
-				</Select.Group>
-			</Select.Content>
-			<Select.Input name="type" />
-		</Select.Root>
+	<section class="grid grid-cols-2 gap-2 md:grid-cols-3 lg:grid-cols-4">
+		{#each Object.entries(sources) as [page, { icon, description, title }]}
+			<a href={`/source/new/${page}`} class="group transition">
+				<Card.Root
+					class="flex h-full w-full flex-col justify-between group-hover:border-primary group-hover:shadow-md"
+				>
+					<Card.Header>
+						<Card.Title>{title}</Card.Title>
+						<Card.Description>{description}</Card.Description>
+					</Card.Header>
+					<Card.Footer class="flex flex-row flex-wrap gap-1 font-mono text-xs">
+						<svelte:component this={icon} />
+					</Card.Footer>
+				</Card.Root>
+			</a>
+		{/each}
 	</section>
-
-	{#each Object.entries(sources) as [value, { component }]}
-		<section class:hidden={value == source?.value}>
-			<svelte:component this={component} />
-		</section>
-	{/each}
 </main>
