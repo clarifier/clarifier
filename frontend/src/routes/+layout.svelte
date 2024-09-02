@@ -3,7 +3,10 @@
 	import Navigation from '$lib/components/layout/Navigation.svelte';
 	import HeaderBar from '$lib/components/layout/HeaderBar.svelte';
 	import Command from '$lib/components/search/Command.svelte';
+	import { ModeWatcher } from 'mode-watcher';
 </script>
+
+<ModeWatcher />
 
 <div class="flex h-full min-h-screen w-full flex-row">
 	<nav class="flex h-full w-[18em] flex-col gap-4 border-r border-r-secondary p-4">
