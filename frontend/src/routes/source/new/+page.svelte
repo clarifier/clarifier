@@ -1,14 +1,17 @@
-<script>
+<script lang="ts">
 	import BackButton from '$lib/components/BackButton.svelte';
-	import { ArrowLeftCircle, Database } from 'lucide-svelte';
+	import { Database } from 'lucide-svelte';
+	import * as Select from '$lib/components/ui/select';
+	import { sources } from '$lib/components/sources/search';
 
-	let source = {
-		id: '1',
-		name: 'Iris',
-		description: 'Dataset with Iris Data',
-		size: '2 MiB',
-		type: 'parquet',
-		source: 'OpenML'
+	let source: {
+		value: keyof typeof sources;
+		label: string;
+		disabled: boolean;
+	} = {
+		value: 'upload',
+		label: sources['upload'].label,
+		disabled: false
 	};
 </script>
 
@@ -24,5 +27,26 @@
 			<h2 class="text-lg">Add a new source to clean or use data from.</h2>
 		</section>
 	</section>
-	<section class="grid grid-cols-2 gap-2 md:grid-cols-3 lg:grid-cols-4"></section>
+
+	<section class="flex flex-col gap-1.5">
+		<Select.Root portal={null} bind:selected={source}>
+			<Select.Trigger class="w-full">
+				<Select.Value placeholder="Select how you want to add a new source" />
+			</Select.Trigger>
+			<Select.Content>
+				<Select.Group>
+					{#each Object.entries(sources) as [value, { label }]}
+						<Select.Item {value} {label}>{label}</Select.Item>
+					{/each}
+				</Select.Group>
+			</Select.Content>
+			<Select.Input name="type" />
+		</Select.Root>
+	</section>
+
+	{#each Object.entries(sources) as [value, { component }]}
+		<section class:hidden={value == source?.value}>
+			<svelte:component this={component} />
+		</section>
+	{/each}
 </main>

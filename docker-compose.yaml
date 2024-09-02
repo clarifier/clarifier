@@ -23,15 +23,20 @@ services:
       - --console-address
       - ":9001"
   frontend:
+    restart: always
     depends_on:
       - backend
     build: ./frontend
     env_file: development.env
     ports:
       - 5173:5173
-    volumes:
-      - ./frontend/src:/app/src:ro
+    develop:
+      watch:
+        - action: sync
+          path: ./frontend/src
+          target: /app/src
   backend:
+    restart: always
     depends_on:
       - postgresql
       - redis
@@ -40,8 +45,11 @@ services:
     env_file: development.env
     environment:
       DEBUG: "True"
-    volumes:
-      - ./backend/backend:/usr/src/backend:ro
+    develop:
+      watch:
+        - action: sync
+          path: ./backend/backend
+          target: /usr/src/backend
     ports:
       - 8000:8000
 volumes:

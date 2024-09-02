@@ -24,9 +24,13 @@ RUN poetry install --no-dev --no-root --no-interaction --no-ansi
 FROM python:3.12.1
 WORKDIR /usr/src/app
 
-COPY --from=venv /.venv /usr/src/.venv
-COPY backend /usr/src/backend
-COPY entrypoint.sh /entrypoint.sh
+# For watching files and because no-root is better
+RUN useradd -ms /bin/sh -u 1001 app
+USER app
+
+COPY --from=venv --chown=app:app /.venv /usr/src/.venv
+COPY --chown=app:app backend /usr/src/backend
+COPY --chown=app:app entrypoint.sh /entrypoint.sh
 WORKDIR /usr/src/backend
 ENV PATH="/usr/src/.venv/bin:$PATH"
 

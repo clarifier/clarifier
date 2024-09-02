@@ -23,11 +23,11 @@
 </script>
 
 <section class="flex flex-col gap-2">
-	<span class="flex flex-row gap-2">
-		<img src={logo} class="h-12 w-12" alt="Clarifier Logo" />
+	<span class="flex flex-row gap-3">
+		<img src={logo} class="h-12 w-12 grayscale invert dark:invert-0" alt="Clarifier Logo" />
 		<span class="ml-auto flex flex-col items-end justify-center gap-0">
-			<h1 class="text-xl text-primary">Clarifier</h1>
-			<h6 class="text-xs text-primary">v0.0.1</h6>
+			<h1 class="font-display m-0 p-0 text-xl font-semibold">Clarifier</h1>
+			<h6 class="-mt-.5 text-sm text-primary">Workbench</h6>
 		</span>
 	</span>
 </section>
