@@ -1,0 +1,34 @@
+services:
+  postgresql:
+    image: bitnami/postgresql
+    env_file: config/config.env
+    volumes:
+      - pgsql-data:/bitnami/postgresql
+    ports:
+      - 5432:5432
+  redis:
+    image: bitnami/redis
+    env_file: config/config.env
+    volumes:
+      - redis-data:/bitnami/redis/data
+  frontend:
+    build:
+      context: frontend
+      dockerfile: Dockerfile.development
+    env_file: config/config.env
+    ports:
+      - 5173:5173
+    volumes:
+      - ./frontend:/app:ro
+  storage:
+    build:
+      context: storage
+    env_file: config/config.env
+  engine:
+    build:
+      context: engine
+    env_file: config/config.env
+  workflow:
+    build:
+      context: workflow
+    env_file: config/config.env
