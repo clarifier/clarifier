@@ -1,7 +1,7 @@
 # Build
 FROM oven/bun
 WORKDIR /app
-COPY . .
+COPY . /app
 RUN bun i
 EXPOSE 5173
-CMD ["bun", "dev"]
+CMD ["bun", "dev", "--host", "0.0.0.0"]

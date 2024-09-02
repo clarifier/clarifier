@@ -1,37 +1,49 @@
+name: clarifier_development
 services:
   postgresql:
     image: bitnami/postgresql
-    env_file: config/config.env
+    env_file: development.env
     volumes:
       - pgsql-data:/bitnami/postgresql
     ports:
       - 5432:5432
   redis:
     image: bitnami/redis
-    env_file: config/config.env
+    env_file: development.env
     volumes:
       - redis-data:/bitnami/redis/data
   minio:
     image: minio/minio
-    env_file: config/config.env
+    env_file: development.env
     volumes:
       - minio-data:/data
+    command:
+      - server
+      - /data
+      - --console-address
+      - ":9001"
   frontend:
+    depends_on:
+      - backend
     build: ./frontend
-    env_file: config/config.env
+    env_file: development.env
     ports:
       - 5173:5173
     volumes:
-      - ./frontend:/app:ro
-  storage:
-    build: ./storage
-    env_file: config/config.env
-  engine:
-    build: ./engine
-    env_file: config/config.env
-  workflow:
-    build: ./workflow
-    env_file: config/config.env
+      - ./frontend/src:/app/src:ro
+  backend:
+    depends_on:
+      - postgresql
+      - redis
+      - minio
+    build: ./backend
+    env_file: development.env
+    environment:
+      DEBUG: "True"
+    volumes:
+      - ./backend/backend:/usr/src/backend:ro
+    ports:
+      - 8000:8000
 volumes:
   redis-data:
   pgsql-data:
