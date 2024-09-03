@@ -35,6 +35,8 @@ services:
         - action: sync
           path: ./frontend/src
           target: /app/src
+        - action: rebuild
+          path: ./frontend/bun.lockb
   backend:
     restart: always
     depends_on:
@@ -50,6 +52,8 @@ services:
         - action: sync
           path: ./backend/backend
           target: /usr/src/backend
+        - action: rebuild
+          path: ./backend/poetry.lock
     ports:
       - 8000:8000
 volumes:
