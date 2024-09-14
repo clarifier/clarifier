@@ -93,7 +93,7 @@ export const searchOpenML = (search: string) =>
 	});
 
 export const addOpenMLSource = async (source: OpenMLSource) => {
-	return axios.post(`${baseURL}/api/sources/upload/openml`, {
+	return axios.post(`${baseURL}/sources/upload/openml`, {
 		openml_id: source.data_id
 	});
 };

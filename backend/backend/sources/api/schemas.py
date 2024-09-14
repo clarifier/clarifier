@@ -23,7 +23,11 @@ class SourceFromURL(UploadSource):
 
 
 class SourceFromOpenML(Schema):
-    openml_id: str
+    id: str
+
+
+class SourceFromKaggle(Schema):
+    id: str
 
 
 class SourceFromTFDS(Schema):

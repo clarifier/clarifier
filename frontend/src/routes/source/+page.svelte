@@ -1,58 +1,12 @@
-<script>
+<script lang="ts">
 	import NewSource from '$lib/components/sources/NewSource.svelte';
 	import SourceCard from '$lib/components/sources/SourceCard.svelte';
-	import { Database } from 'lucide-svelte';
+	import { ArrowUp, Database, PlusCircle } from 'lucide-svelte';
+	import { sourceTypes } from './new/sources';
+	import * as DropdownMenu from '$lib/components/ui/dropdown-menu';
+	import { Button } from '$lib/components/ui/button';
 
-	let sources = [
-		{
-			id: '1',
-			name: 'Iris',
-			description: 'Dataset with Iris Data',
-			size: '2 MiB',
-			type: 'parquet',
-			source: 'OpenML'
-		},
-		{
-			id: '2',
-			name: 'Titanic',
-			description: 'Passenger survival data from the Titanic',
-			size: '1.2 MiB',
-			type: 'csv',
-			source: 'Kaggle'
-		},
-		{
-			id: '3',
-			name: 'MNIST',
-			description: 'Handwritten digit images for classification',
-			size: '12 MiB',
-			type: 'gz',
-			source: 'TensorFlow'
-		},
-		{
-			id: '4',
-			name: 'Wine Quality',
-			description: 'Wine quality data based on physicochemical tests',
-			size: '50 KiB',
-			type: 'csv',
-			source: 'UCI Machine Learning Repository'
-		},
-		{
-			id: '5',
-			name: 'Weather Data',
-			description: 'Daily weather observations over a decade',
-			size: '10 GiB',
-			type: 'parquet',
-			source: 'NOAA'
-		},
-		{
-			id: '6',
-			name: 'COCO',
-			description: 'Common Objects in Context dataset for object detection',
-			size: '25 GiB',
-			type: 'zip',
-			source: 'COCO Dataset'
-		}
-	];
+	let sources: any[] = [];
 </script>
 
 <svelte:head>
@@ -70,11 +24,37 @@
 			<h1 class="text-xl font-semibold">Sources</h1>
 			<h2 class="text-lg">Add sources to clean, wrangle and transform for analysis.</h2>
 		</section>
+		<DropdownMenu.Root>
+			<DropdownMenu.Trigger class="ml-auto h-full">
+				<Button variant="outline" class="flex h-full flex-row gap-2">
+					<PlusCircle size={18} />
+					Add a new source</Button
+				>
+			</DropdownMenu.Trigger>
+			<DropdownMenu.Content>
+				<DropdownMenu.Group>
+					{#each Object.entries(sourceTypes) as [key, sourceType]}
+						<DropdownMenu.Item
+							class="flex cursor-pointer flex-row gap-2"
+							href={`/source/new/${key}`}
+						>
+							<svelte:component this={sourceType.icon} size={18} />
+							{sourceType.title}
+						</DropdownMenu.Item>
+					{/each}
+				</DropdownMenu.Group>
+			</DropdownMenu.Content>
+		</DropdownMenu.Root>
 	</section>
+	{#if !sources.length}
+		<section class="relative flex w-full items-center justify-center p-3">
+			No sources as of yet, add a source!
+			<ArrowUp class="absolute right-1 top-1 md:right-4" />
+		</section>
+	{/if}
 	<section class="grid grid-cols-2 gap-2 md:grid-cols-3 lg:grid-cols-4">
 		{#each sources as source}
 			<SourceCard {source} />
 		{/each}
-		<NewSource />
 	</section>
 </main>

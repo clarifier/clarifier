@@ -12,6 +12,7 @@ from sources.api.schemas import (
     SourceFromFile,
     SourceFromURL,
     SourceFromOpenML,
+    SourceFromKaggle,
     SourceFromTFDS,
 )
 from sources.models import Source
@@ -46,6 +47,13 @@ def upload_source_by_url(request, details: SourceFromURL):
 
 @router.post("/upload/openml", response=SourceSchema)
 def upload_source_by_openml_id(request, details: SourceFromOpenML):
+    raise HttpError(412, "Testing")
+    pass
+
+
+@router.post("/upload/openml", response=SourceSchema)
+def upload_source_by_kaggle_id(request, details: SourceFromKaggle):
+    raise HttpError(412, "Testing")
     pass
 
 

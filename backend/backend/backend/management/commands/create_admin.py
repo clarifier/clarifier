@@ -39,7 +39,7 @@ class Command(createsuperuser.Command):
                 raise
 
         database = options.get("database")
-        db = self.UserModel._default_manager.db_manager(database)
+        db = self.UserModel._default_manager.db_manager(database)  # type: ignore
         user = db.get(username=username)
         user.set_password(password)
         message = f"Setting password for User {username}."
