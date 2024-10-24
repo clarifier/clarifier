@@ -1,4 +1,3 @@
-import { goto } from '$app/navigation';
 import { baseURL } from '$lib/globals';
 import axios from 'axios';
 
@@ -94,7 +93,7 @@ export const searchOpenML = (search: string) =>
 
 export const addOpenMLSource = async (source: OpenMLSource) => {
 	return axios.post(`${baseURL}/sources/upload/openml`, {
-		openml_id: source.data_id
+		id: source.data_id
 	});
 };
 

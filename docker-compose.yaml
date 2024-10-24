@@ -22,6 +22,21 @@ services:
       - /data
       - --console-address
       - ":9001"
+  clickhouse:
+    image: clickhouse/clickhouse-server
+    env_file: development.env
+    volumes:
+      - clickhouse-data:/var/lib/clickhouse
+    cap_add:
+      - SYS_NICE
+      - NET_ADMIN
+      - IPC_LOCK
+    ports:
+      - 8123:8123
+    ulimits:
+      nofile:
+        soft: 262144
+        hard: 262144
   frontend:
     restart: always
     depends_on:
@@ -56,7 +71,34 @@ services:
           path: ./backend/poetry.lock
     ports:
       - 8000:8000
+  backend_worker:
+    restart: always
+    depends_on:
+      - postgresql
+      - redis
+      - minio
+    build: ./backend
+    env_file: development.env
+    environment:
+      DEBUG: "True"
+    develop:
+      watch:
+        - action: sync+restart
+          path: ./backend/backend
+          target: /usr/src/backend
+        - action: rebuild
+          path: ./backend/poetry.lock
+    command:
+      - /usr/src/backend/manage.py
+      - rqworker
+      - --with-scheduler
+      - default
+      - sources
+      - workflows
+      - workspace
+      - profiling
 volumes:
   redis-data:
   pgsql-data:
   minio-data:
+  clickhouse-data:

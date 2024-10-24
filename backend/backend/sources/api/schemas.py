@@ -11,7 +11,7 @@ class SourceSchema(ModelSchema):
 
 class UploadSource(Schema):
     name: str
-    description: str
+    description: Optional[str] = ""
 
 
 class SourceFromFile(UploadSource):

@@ -19,7 +19,7 @@
 		mutationFn: addOpenMLSource,
 		onSuccess: ({ data }) => {
 			toast.success(`Added OpenML source ${selected.name}`);
-			goto(data.id);
+			goto(`/source/${data.id}`);
 		},
 		onError: () => {
 			toast.error(`Adding OpenML source failed`);
@@ -48,7 +48,7 @@
 				!!selected && $upload.mutate(selected);
 			}}
 			variant="secondary"
-			class="ml-auto flex h-full flex-row gap-1"
+			class={cn(['ml-auto flex h-full flex-row gap-1', selected && 'ring ring-primary'])}
 			disabled={!selected}
 		>
 			<Save />

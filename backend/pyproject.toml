@@ -16,6 +16,8 @@ daphne = "^4.1.2"
 channels = "^4.1.0"
 django-rq = "^2.10.2"
 psycopg2-binary = "^2.9.9"
+clickhouse-connect = "^0.8.3"
+requests = "^2.32.3"
 
 [tool.poetry.group.dev.dependencies]
 black = "^24.8.0"

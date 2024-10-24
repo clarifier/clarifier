@@ -71,6 +71,13 @@ DATABASES = {
     }
 }
 
+CLICKHOUSE = {
+    "host": os.environ.get("CLICKHOUSE_HOST"),
+    "username": os.environ.get("CLICKHOUSE_USER"),
+    "password": os.environ.get("CLICKHOUSE_PASSWORD"),
+    "database": os.environ.get("CLICKHOUSE_DB"),
+}
+
 OBJECT_STORAGE = {
     "host": os.environ.get("S3_HOST"),
     "username": os.environ.get("S3_USERNAME"),
@@ -78,14 +85,20 @@ OBJECT_STORAGE = {
     "bucket": os.environ.get("S3_BUCKET"),
 }
 
+RQ_QUEUES_SHARED = {
+    "HOST": os.environ.get("REDIS_HOST", "redis"),
+    "PORT": 6379,
+    "DB": 0,
+    "PASSWORD": os.environ.get("REDIS_PASSWORD", ""),
+    "DEFAULT_TIMEOUT": 360,
+}
+
 RQ_QUEUES = {
-    "default": {
-        "HOST": os.environ.get("REDIS_HOST", "redis"),
-        "PORT": 6379,
-        "DB": 0,
-        "PASSWORD": os.environ.get("REDIS_PASSWORD", ""),
-        "DEFAULT_TIMEOUT": 360,
-    },
+    "default": {**RQ_QUEUES_SHARED},
+    "sources": {**RQ_QUEUES_SHARED},
+    "workflows": {**RQ_QUEUES_SHARED},
+    "workspace": {**RQ_QUEUES_SHARED},
+    "profiling": {**RQ_QUEUES_SHARED},
 }
 
 AUTH_PASSWORD_VALIDATORS = [
