@@ -5,14 +5,33 @@
 	import { Button } from '../ui/button';
 	import { page } from '$app/stores';
 	import { cn } from '$lib/utils';
+	import { createQuery } from '@tanstack/svelte-query';
+	import axios from 'axios';
+	import { baseURL } from '$lib/globals';
 
-	let pages = [
+	const statusQuery = createQuery({
+		queryKey: ['status'],
+		queryFn: () => axios.get(`${baseURL}/status`),
+		refetchOnMount: true
+	});
+
+	const status = $derived(
+		$statusQuery.isSuccess
+			? $statusQuery.data?.data
+			: {
+					profiling: true,
+					cleaning: true,
+					deploy: true
+				}
+	);
+
+	let pages = $derived([
 		{ label: 'Dashboard', to: '/', icon: Activity, strict: true },
 		{ label: 'Sources', to: '/source', icon: Database },
-		{ label: 'Profiling', to: '/profilei', icon: Eye, disabled: true },
-		{ label: 'Cleaning', to: '/clean', icon: Loader, disabled: true },
-		{ label: 'Deploy', to: '/deploy', icon: CheckCircle, disabled: true }
-	];
+		{ label: 'Profiling', to: '/profile', icon: Eye, disabled: status['profiling'] },
+		{ label: 'Cleaning', to: '/clean', icon: Loader, disabled: status['cleaning'] },
+		{ label: 'Deploy', to: '/deploy', icon: CheckCircle, disabled: status['deploy'] }
+	]);
 
 	let currentPage = $derived((e: string, strict?: boolean) => {
 		if (strict) {
