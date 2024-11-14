@@ -21,7 +21,7 @@
 	>
 		<Card.Header>
 			<Card.Title>{name}</Card.Title>
-			<Card.Description>{description}</Card.Description>
+			<Card.Description class="h-16 truncate text-wrap">{description}</Card.Description>
 		</Card.Header>
 		<Card.Footer class="flex flex-row flex-wrap gap-1 font-mono text-xs">
 			<Badge variant="outline" title={size}>{size}</Badge>
