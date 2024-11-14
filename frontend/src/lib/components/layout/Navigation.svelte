@@ -14,12 +14,12 @@
 		{ label: 'Deploy', to: '/deploy', icon: CheckCircle, disabled: true }
 	];
 
-	$: currentPage = (e: string, strict?: boolean) => {
+	let currentPage = $derived((e: string, strict?: boolean) => {
 		if (strict) {
 			return $page.url.pathname == e;
 		}
 		return $page.url.pathname.startsWith(e);
-	};
+	});
 </script>
 
 <section class="flex flex-col gap-2">
@@ -45,7 +45,8 @@
 				disabled && 'pointer-events-none text-gray-500'
 			)}
 		>
-			<svelte:component this={icon} size="18" />
+			{@const SvelteComponent = icon}
+			<SvelteComponent size="18" />
 			{label}
 		</Button>
 	{/each}

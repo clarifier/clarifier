@@ -12,8 +12,8 @@
 	import { Button } from '$lib/components/ui/button';
 	import { createMutation, createQuery } from '@tanstack/svelte-query';
 	import { goto } from '$app/navigation';
-	let search = '';
-	let selected: KaggleSource;
+	let search = $state('');
+	let selected: KaggleSource = $state();
 
 	const upload = createMutation({
 		mutationFn: addKaggleSource,
@@ -26,10 +26,10 @@
 		}
 	});
 
-	$: query = createQuery({
+	let query = $derived(createQuery({
 		queryKey: ['kaggle', 'search', search],
 		queryFn: () => searchKaggle(search)
-	});
+	}));
 </script>
 
 <svelte:head>
@@ -67,7 +67,7 @@
 				{$query.error.message}
 			{:else if $query.isSuccess}
 				{#each $query.data.data?.documents ?? [] as _source}
-					<button class="group transition" on:click={() => (selected = _source)}>
+					<button class="group transition" onclick={() => (selected = _source)}>
 						<Card.Root
 							class={cn(
 								'flex h-full w-full flex-col justify-between group-hover:border-primary group-hover:shadow-md',
@@ -77,7 +77,7 @@
 							<Card.Header>
 								<Card.Title class="flex flex-row items-center justify-between">
 									{_source.name}
-									<button on:click={(e) => e.stopPropagation()}>
+									<button onclick={(e) => e.stopPropagation()}>
 										<Button
 											title="Open on Kaggle"
 											variant="outline"

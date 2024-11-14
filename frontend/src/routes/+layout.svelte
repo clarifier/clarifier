@@ -1,4 +1,4 @@
-<script>
+<script lang="ts">
 	import '../app.css';
 	import Navigation from '$lib/components/layout/Navigation.svelte';
 	import HeaderBar from '$lib/components/layout/HeaderBar.svelte';
@@ -7,6 +7,8 @@
 	import { QueryClient, QueryClientProvider } from '@tanstack/svelte-query';
 	import { browser } from '$app/environment';
 	import { Toaster } from '$lib/components/ui/sonner';
+
+	let { children } = $props();
 
 	const queryClient = new QueryClient({
 		defaultOptions: {
@@ -28,7 +30,7 @@
 		</nav>
 		<section class="flex h-full w-full flex-col gap-4 p-4">
 			<HeaderBar />
-			<slot />
+			{@render children?.()}
 		</section>
 	</div>
 

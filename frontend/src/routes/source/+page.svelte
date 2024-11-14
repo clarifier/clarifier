@@ -4,9 +4,14 @@
 	import { sourceTypes } from './new/sources';
 	import * as DropdownMenu from '$lib/components/ui/dropdown-menu';
 	import { Button } from '$lib/components/ui/button';
-	import { page } from '$app/stores';
+	import { createQuery } from '@tanstack/svelte-query';
+	import axios from 'axios';
+	import { baseURL } from '$lib/globals';
 
-	const sources = page?.sources;
+	const sources = createQuery({
+		queryKey: ['sources'],
+		queryFn: () => axios.get(`${baseURL}/sources/`)
+	});
 </script>
 
 <svelte:head>
@@ -38,7 +43,7 @@
 							class="flex cursor-pointer flex-row gap-2"
 							href={`/source/new/${key}`}
 						>
-							<svelte:component this={sourceType.icon} size={18} />
+							<sourceType.icon size={18} />
 							{sourceType.title}
 						</DropdownMenu.Item>
 					{/each}

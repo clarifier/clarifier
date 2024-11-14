@@ -1,18 +1,28 @@
 <script lang="ts">
 	type Source = {
-		id: String;
-		name: String;
-		description: String;
-		size: String;
-		type: String;
-		source: String;
+		id: string;
+		name: string;
+		description: string;
+		size: string;
+		type: string;
+		source: string;
+		data?: {
+			status: 'fetching' | 'success' | 'failed' | 'working' | 'queued';
+			ch_table?: string;
+		};
 	};
 
 	import * as Card from '$lib/components/ui/card';
+	import { cn } from '$lib/utils';
 	import { Badge } from '../ui/badge';
 
-	export let source: Source;
+	interface Props {
+		source: Source;
+	}
+
+	let { source }: Props = $props();
 	const { id, name, description, size, type, source: src } = source;
+	const status = source.data?.status;
 </script>
 
 <a href={`/source/${id}`} class="group transition">

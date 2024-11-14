@@ -51,11 +51,13 @@
 				<span class="text-sm">{description}</span>
 				{#if active}
 					<Button href={to} variant="default" class="mt-auto">
-						<svelte:component this={icon} />
+						{@const SvelteComponent = icon}
+						<SvelteComponent />
 					</Button>
 				{:else}
 					<Button class="mt-auto" disabled>
-						<svelte:component this={icon} />
+						{@const SvelteComponent_1 = icon}
+						<SvelteComponent_1 />
 					</Button>
 				{/if}
 			</section>
