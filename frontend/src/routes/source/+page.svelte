@@ -1,12 +1,12 @@
 <script lang="ts">
-	import NewSource from '$lib/components/sources/NewSource.svelte';
 	import SourceCard from '$lib/components/sources/SourceCard.svelte';
 	import { ArrowUp, Database, PlusCircle } from 'lucide-svelte';
 	import { sourceTypes } from './new/sources';
 	import * as DropdownMenu from '$lib/components/ui/dropdown-menu';
 	import { Button } from '$lib/components/ui/button';
+	import { page } from '$app/stores';
 
-	let sources: any[] = [];
+	const sources = page?.sources;
 </script>
 
 <svelte:head>
@@ -46,15 +46,23 @@
 			</DropdownMenu.Content>
 		</DropdownMenu.Root>
 	</section>
-	{#if !sources.length}
-		<section class="relative flex w-full items-center justify-center p-3">
-			No sources as of yet, add a source!
-			<ArrowUp class="absolute right-1 top-1 md:right-4" />
-		</section>
+	{#if $sources.isLoading}
+		Loading...
+	{:else if $sources.isError}
+		Error...
+	{:else if $sources.isSuccess}
+		{@const data = $sources.data?.data?.items ?? []}
+		{#if !data.length}
+			<section class="relative flex w-full items-center justify-center p-3">
+				No sources as of yet, add a source!
+				<ArrowUp class="absolute right-1 top-1 md:right-4" />
+			</section>
+		{:else}
+			<section class="grid grid-cols-2 gap-2 md:grid-cols-3 lg:grid-cols-4">
+				{#each data as source}
+					<SourceCard {source} />
+				{/each}
+			</section>
+		{/if}
 	{/if}
-	<section class="grid grid-cols-2 gap-2 md:grid-cols-3 lg:grid-cols-4">
-		{#each sources as source}
-			<SourceCard {source} />
-		{/each}
-	</section>
 </main>
